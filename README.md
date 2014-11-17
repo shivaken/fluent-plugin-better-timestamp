@@ -9,6 +9,11 @@ fluentd uses unixtime as 'time' and fluent-plugin-elasticsearch inserts the 'tim
 ### fluent-plugin-better-timestamp
 this plugin works as a filter that creates '@timestamp' with proper format from 'time' and one more field which have 'msec' data
 
+## install
+```
+gem install fluent-plugin-better-timestamp
+```
+
 ### configuration
 'better-timestamp' plugin has only 3 config parameters
 
