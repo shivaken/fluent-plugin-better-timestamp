@@ -33,13 +33,10 @@ class BetterTimestampOutputTest < Test::Unit::TestCase
     mapped = {}
 
     msec = 1
-    time = Time.now
-    time_str = Time.at(time.to_r, msec * 1000).strftime("%Y-%m-%dT%H:%M:%S.%L%z")
     d.run do
-      d.emit({"msec" => msec.to_s, "k1" => 'v'}, time.to_r)
+      d.emit({"msec" => msec, "k1" => 'v'})
     end
 
-    assert_equal time_str, d.records[0]['@timestamp']
     assert d.records[0]['@timestamp']
   end
 end
