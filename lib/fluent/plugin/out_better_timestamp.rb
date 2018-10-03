@@ -4,6 +4,11 @@ module Fluent
   class BetterTimestampOutput < Output
     Fluent::Plugin.register_output('better_timestamp', self)
 
+    # Define `router` method of v0.12 to support v0.10 or earlier
+    unless method_defined?(:router)
+      define_method("router") { Fluent::Engine }
+    end
+
     config_param :tag, :string
     config_param :msec_key, :string, :default => 'msec'
     config_param :timestamp_key, :string, :default => '@timestamp'
@@ -23,13 +28,12 @@ module Fluent
           @map[k] = v
         end
       }
-
     end
 
     def emit(tag, es, chain)
       es.each { |time, record|
         filter_record(tag, time, record)
-        Engine.emit(@tag, time, modify_record(time, record))
+        router.emit(@tag, time, modify_record(time, record))
       }
 
       chain.next

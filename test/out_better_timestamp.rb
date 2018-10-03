@@ -10,7 +10,7 @@ class BetterTimestampOutputTest < Test::Unit::TestCase
     type better_timestamp
     tag foo.filtered
     msec_key msec
-    timestamp_key
+    timestamp_key @timestamp
   ]
 
   def create_driver(conf = CONFIG)
@@ -19,9 +19,8 @@ class BetterTimestampOutputTest < Test::Unit::TestCase
 
   def test_configure
     d = create_driver
-    map = d.instance.instance_variable_get(:@map)
 
-    #assert_equal 'msec', map['msec_key']
+    assert_equal 'msec', d.instance.msec_key
   end
 
   def test_remove_one_key
@@ -33,8 +32,9 @@ class BetterTimestampOutputTest < Test::Unit::TestCase
 
     mapped = {}
 
+    msec = 1
     d.run do
-      d.emit("msec" => '1', "k1" => 'v')
+      d.emit({"msec" => msec, "k1" => 'v'})
     end
 
     assert d.records[0]['@timestamp']
